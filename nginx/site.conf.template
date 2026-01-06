@@ -1,0 +1,22 @@
+server {
+    listen 80;
+    server_name {{DOMAIN}};
+
+    # n8n 后台代理
+    location / {
+        proxy_pass http://localhost:5678;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 前端页面
+    location /frontend/ {
+        alias /root/n8n-sora2-free/frontend/;
+        index index.html;
+    }
+
+    # 视频服务代理（5000端口）
+    location /video/ {
+        proxy_pass http://localhost:5000/;
+    }
+}
